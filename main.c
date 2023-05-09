@@ -1,23 +1,75 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "functions.h"
+#include "aluno.h"
+#include "tabelahash.h"
 
-int main(void) {
-    struct HashTable* ht = create_table();
-    insert(ht, "D", 2);
-    insert(ht, "Q", 0);
-    insert(ht, "B", 0);
-    insert(ht, "I", 1);
-    insert(ht, "M", 2);
-    insert(ht, "H", 0);
-    insert(ht, "G", 2);
-    insert(ht, "U", 1);
-    insert(ht, "A", 2);
-    insert(ht, "C", 1);
-    insert(ht, "R", 1);
-    insert(ht, "S", 2);
-    insert(ht, "J", 2);
-    print_table(ht);
+#define TABLE_SIZE 1427
+
+int main() {
+    // criando um vetor de alunos
+    Aluno *alunos[4];
+    alunos[0] = criaAluno(123, "Joao", 10, 10, 10);
+    alunos[1] = criaAluno(456, "Maria", 10, 10, 10);
+    alunos[2] = criaAluno(789, "Jose", 10, 10, 10);
+    alunos[3] = criaAluno(1550, "Lucas", 10, 10, 10);
+
+    // criando uma tabela hash endereçamento aberto
+    Hash *ha = criaHash(TABLE_SIZE);
+
+    insereHash_EnderAberto(ha, *alunos[0]);
+    insereHash_EnderAberto(ha, *alunos[1]);
+    insereHash_EnderAberto(ha, *alunos[2]);
+    insereHash_EnderAberto(ha, *alunos[3]);
+
+    imprimeHash(ha);
+
+    Aluno *buscado = (Aluno*) malloc(sizeof(Aluno));
+    buscaHash_EnderAberto(ha, 1550, buscado);
+    imprimeAluno(buscado);
+
+    liberaHash(ha);
+
+    printf("\n\nAgora com enderecamento separado\n\n\n");
+
+    //criando uma tabela hash com endereco separado
+    HashSeparado *haSeparado = criaHashSeparado(TABLE_SIZE);
+
+    insereHash_EnderSepatado(haSeparado, *alunos[0]);
+    insereHash_EnderSepatado(haSeparado, *alunos[1]);
+    insereHash_EnderSepatado(haSeparado, *alunos[2]);
+    insereHash_EnderSepatado(haSeparado, *alunos[3]);
+
+    HashSeparado *haSeparadoo = criaHashSeparado(3);
+
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(2, "D", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(0, "Q", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(0, "B", 10, 10, 10));
+
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(1, "I", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(2, "M", 10, 10, 10));
+
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(0, "H", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(2, "G", 10, 10, 10));
+
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(1, "U", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(2, "A", 10, 10, 10));
+
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(1, "C", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(1, "R", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(2, "S", 10, 10, 10));
+  insereHash_EnderSepatado(haSeparadoo, *criaAluno(2, "J", 10, 10, 10));
+
+    imprimeHashSeparado(haSeparado);
+
+    imprimeHashSeparado(haSeparadoo);
+
+    buscaHash_EnderSeparado(haSeparado, 1550, buscado);
+    imprimeAluno(buscado);
+    
+    for (int i = 0; i < 4; i++) {
+        liberaAluno(alunos[i]);
+    }
+
     return 0;
 }
